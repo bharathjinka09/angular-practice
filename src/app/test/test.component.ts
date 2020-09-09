@@ -3,58 +3,148 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-test',
   template: `
-    <h2>
-      Welcome {{ name }}
-      {{ 22 + 2 }}
-    </h2>
-    <h2>{{ 'Welcome ' + name }}</h2>
-    {{ name.length }}
-    {{ name.toUpperCase() }}
-    {{ greetUser() }}
+    <div class="container">
+      <h2>
+        Welcome {{ name }}
+        {{ 22 + 2 }}
+      </h2>
+      <h2>{{ 'Welcome ' + name }}</h2>
+      {{ name.length }}
+      {{ name.toUpperCase() }}
+      {{ greetUser() }}
 
-    {{ siteUrl }}
+      {{ siteUrl }}
+      <br />
+      <br />
 
-    <input type="text" [id]="myId" value="bharath" />
+      <input class="form-control" type="text" [id]="myId" value="bharath" />
+      <br />
+      <input
+        class="form-control"
+        [disabled]="isDisabled"
+        type="text"
+        id="{{ myId }}"
+        value="bharath"
+      />
+      <br />
 
-    <input
-      [disabled]="isDisabled"
-      type="text"
-      id="{{ myId }}"
-      value="bharath"
-    />
+      <input
+        class="form-control"
+        bind-disabled="isDisabled"
+        type="text"
+        id="{{ myId }}"
+        value="bharath"
+      />
+      <br />
 
-    <input
-      bind-disabled="isDisabled"
-      type="text"
-      id="{{ myId }}"
-      value="bharath"
-    />
+      <h1 [class]="successClass">Ranga Bharath</h1>
 
-    <h1 [class]="successClass">Ranga Bharath</h1>
+      <h1 class="text-special" [class]="successClass">Ranga Bharath</h1>
 
-    <h1 class="text-special" [class]="successClass">Ranga Bharath</h1>
+      <h2 [class.text-danger]="hasError">Error</h2>
 
-    <h2 [class.text-danger]="hasError">Error</h2>
+      <h2 [ngClass]="messageClasses">Bharath</h2>
+      <br />
 
-    <h2 [ngClass]="messageClasses">Bharath</h2>
-    <br />
+      <h2 [style.color]="'orange'">Style Binding</h2>
 
-    <h2 [style.color]="'orange'">Style Binding</h2>
+      <h2 [style.color]="hasError ? 'red' : 'green'">Style Binding</h2>
 
-    <h2 [style.color]="hasError ? 'red' : 'green'">Style Binding</h2>
+      <h2 [style.color]="highlightColor">Style Binding 2</h2>
 
-    <h2 [style.color]="highlightColor">Style Binding 2</h2>
+      <h2 [ngStyle]="titleStyles">Style Binding 3</h2>
 
-    <h2 [ngStyle]="titleStyles">Style Binding 3</h2>
+      <h3 class="text-center">Event Binding Example</h3>
 
-    <h3><u>Event Binding Example</u></h3>
+      <button class="btn btn-info" (click)="onClick($event)">Greet</button>
+      <br />
+      <br />
+      <button class="btn btn-info" (click)="greeting = 'Welcome bharath'">
+        Greet
+      </button>
 
-    <button (click)="onClick()">Greet</button>
+      {{ greeting }}
+      <br />
+      <br />
+      <input class="form-control" #myInput type="text" />
+      <br />
 
-    {{greeting}}
+      <button class="btn btn-success" (click)="logMessage(myInput.value)">
+        Log
+      </button>
+      <br />
+
+      <div class="text-center">
+        <h2>Two way data binding</h2>
+      </div>
+      <input [(ngModel)]="place" class="form-control" type="text" />
+      {{ place }}
+
+      <h2 *ngIf="displayName; else elseBlock">Bharath If</h2>
+
+      <ng-template #elseBlock>
+        <h2>Name is hidden</h2>
+      </ng-template>
+
+      <div *ngIf="displayName; then thenBlock; else elseBlock"></div>
+
+      <ng-template #thenBlock>
+        <h2>thenblock</h2>
+      </ng-template>
+
+      <ng-template #elseBlock>
+        <h2>else block</h2>
+      </ng-template>
+
+      <div [ngSwitch]="color">
+        <div *ngSwitchCase="'red'">You picked red color</div>
+        <div *ngSwitchCase="'blue'">You picked blue color</div>
+        <div *ngSwitchCase="'green'">You picked green color</div>
+        <div *ngSwitchDefault>Pick again!</div>
+      </div>
+      <br />
+      <br />
+
+      <h2>ngFor directive</h2>
+
+      <div *ngFor="let color of colors; index as i">
+        <p>{{ i + 1 }} {{ color }}</p>
+      </div>
+
+      <h2>First</h2>
+
+      <div *ngFor="let color of colors; first as f">
+        <p>{{ f }} {{ color }}</p>
+      </div>
+
+      <h2>Last</h2>
+
+      <div *ngFor="let color of colors; last as l">
+        <p>{{ l }} {{ color }}</p>
+      </div>
+
+      <h2>Odd</h2>
+
+      <div *ngFor="let color of colors; odd as o">
+        <p>{{ o }} {{ color }}</p>
+      </div>
+
+      <h2>Even</h2>
+
+      <div *ngFor="let color of colors; even as e">
+        <p>{{ e }} {{ color }}</p>
+      </div>
+
+      <br />
+      <br />
+      <br />
+    </div>
   `,
   styles: [
     `
+      .center {
+        text-align: center;
+      }
       .text-success {
         color: green;
       }
@@ -68,7 +158,13 @@ import { Component, OnInit } from '@angular/core';
   ],
 })
 export class TestComponent implements OnInit {
+  public colors = ['red', 'green', 'blue', 'yellow'];
+  public color = 'red';
+
+  public displayName = true;
   public name = 'Bharath!';
+
+  public place = '';
 
   public myId = 'testId';
 
@@ -84,7 +180,7 @@ export class TestComponent implements OnInit {
 
   public highlightColor = 'orange';
 
-  public greeting = ""
+  public greeting = '';
 
   public messageClasses = {
     'text-success': !this.hasError,
@@ -105,9 +201,12 @@ export class TestComponent implements OnInit {
     return 'Hello ' + this.name;
   }
 
-  onClick(){
-    console.log('Welcome!')
-    this.greeting = "Welcome ram!"
+  onClick(event) {
+    console.log(event);
+    this.greeting = event.type;
+  }
 
+  logMessage(value) {
+    console.log(value);
   }
 }
